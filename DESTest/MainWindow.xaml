@@ -1,0 +1,31 @@
+﻿<Window x:Class="DESTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DESTest"
+        mc:Ignorable="d"
+        Title="DES"
+        Height="240" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Content="文件路径：" VerticalAlignment="Center"/>
+            <TextBox Height="30" Width="300" Text="{Binding FilePath}" VerticalContentAlignment="Center"/>
+            <Button x:Name="SelectFileButton" Content="打开文件" Height="30" Width="100" Click="SelectFileButton_Click"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="段长（字节）：" VerticalAlignment="Center"/>
+            <TextBox Height="30" Width="60" Text="{Binding ByteLength}" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        
+        <Button Grid.Row="2" x:Name="StartButton" Content="开始" Height="30" Width="100" Click="StartButton_Click"/>
+        
+    </Grid>
+</Window>
