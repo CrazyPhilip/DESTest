@@ -12,20 +12,63 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Label Content="文件路径：" VerticalAlignment="Center"/>
             <TextBox Height="30" Width="300" Text="{Binding FilePath}" VerticalContentAlignment="Center"/>
             <Button x:Name="SelectFileButton" Content="打开文件" Height="30" Width="100" Click="SelectFileButton_Click"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Label Content="加密文件路径：" VerticalAlignment="Center"/>
+            <TextBox Height="30" Width="300" Text="{Binding DecodeFilePath}" VerticalContentAlignment="Center"/>
+            <!--<Button x:Name="SelectFileButton" Content="打开文件" Height="30" Width="100" Click="SelectFileButton_Click"/>-->
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
             <Label Content="段长（字节）：" VerticalAlignment="Center"/>
             <TextBox Height="30" Width="60" Text="{Binding ByteLength}" VerticalContentAlignment="Center"/>
+            <Button Height="30" Width="60" Content="button" Click="Button_Click"/>
         </StackPanel>
-        
-        <Button Grid.Row="2" x:Name="StartButton" Content="开始" Height="30" Width="100" Click="StartButton_Click"/>
-        
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+            <Button x:Name="StartButton" Content="加密" Height="30" Width="100" Click="StartButton_Click"/>
+            <ProgressBar x:Name="progressBar" Height="30" Width="100">
+                <ProgressBar.Triggers>
+                    <EventTrigger RoutedEvent="ProgressBar.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="progressBar" 
+                                                 Storyboard.TargetProperty="Value"
+                                                 From="0" To="100" Duration="0:0:5"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ProgressBar.Triggers>
+            </ProgressBar>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="DecodeButton" Content="解密" Height="30" Width="100" Click="DecodeButton_Click"/>
+            <ProgressBar x:Name="progressBar2" Height="30" Width="100">
+                <ProgressBar.Triggers>
+                    <EventTrigger RoutedEvent="ProgressBar.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="progressBar2" 
+                                                 Storyboard.TargetProperty="Value"
+                                                 From="0" To="100" Duration="0:0:5"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ProgressBar.Triggers>
+            </ProgressBar>
+        </StackPanel>
     </Grid>
 </Window>

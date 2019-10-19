@@ -26,6 +26,14 @@ namespace DESTest
             set { SetProperty(ref byteLength, value); }
         }
 
+        private string decodeFilePath;   //comment
+
+        public string DecodeFilePath
+        {
+            get { return decodeFilePath; }
+            set { SetProperty(ref decodeFilePath, value); }
+        }
+
         public MainViewModel()
         {
             ByteLength = 8;
