@@ -20,8 +20,7 @@ namespace DESTest
 
         public DESEncrypt()
         {
-            string strcode = "28742389";
-            key = strcode;
+            key = "28742389";   //默认
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace DESTest
         {
             return Decrypt(str, Key);
         }
-
 
         /// <summary>
         /// DES加密

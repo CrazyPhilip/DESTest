@@ -6,69 +6,122 @@
         xmlns:local="clr-namespace:DESTest"
         mc:Ignorable="d"
         Title="DES"
-        Height="240" Width="600">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        Height="400" Width="800" ResizeMode="NoResize">
+    <TabControl>
+        <TabItem Header="文件">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Label Content="文件路径：" VerticalAlignment="Center"/>
-            <TextBox Height="30" Width="300" Text="{Binding FilePath}" VerticalContentAlignment="Center"/>
-            <Button x:Name="SelectFileButton" Content="打开文件" Height="30" Width="100" Click="SelectFileButton_Click"/>
-        </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+                    <Label Content="明文文件路径：" VerticalAlignment="Center"/>
+                    <Button x:Name="SelectEncodingFileButton" Content="打开文件" Width="100" HorizontalAlignment="Left" Click="SelectEncodingFileButton_Click"/>
+                    <TextBox Height="30" Text="{Binding EncodingFilePath}" VerticalContentAlignment="Center"/>
+                </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Label Content="加密文件路径：" VerticalAlignment="Center"/>
-            <TextBox Height="30" Width="300" Text="{Binding DecodeFilePath}" VerticalContentAlignment="Center"/>
-            <!--<Button x:Name="SelectFileButton" Content="打开文件" Height="30" Width="100" Click="SelectFileButton_Click"/>-->
-        </StackPanel>
+                <TextBlock Grid.Row="0" Grid.Column="1" Height="80" Background="LightYellow"/>
 
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
-            <Label Content="段长（字节）：" VerticalAlignment="Center"/>
-            <TextBox Height="30" Width="60" Text="{Binding ByteLength}" VerticalContentAlignment="Center"/>
-            <Button Height="30" Width="60" Content="button" Click="Button_Click"/>
-        </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+                    <Label Content="密文文件路径：" VerticalAlignment="Center"/>
+                    <Button x:Name="SelectDecodingFileButton" Content="打开文件" Width="100" HorizontalAlignment="Left" Click="SelectDecodingFileButton_Click"/>
+                    <TextBox Height="30" Text="{Binding DecodingFilePath}" VerticalContentAlignment="Center"/>
+                </StackPanel>
 
-        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
-            <Button x:Name="StartButton" Content="加密" Height="30" Width="100" Click="StartButton_Click"/>
-            <ProgressBar x:Name="progressBar" Height="30" Width="100">
-                <ProgressBar.Triggers>
-                    <EventTrigger RoutedEvent="ProgressBar.Loaded">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetName="progressBar" 
+                <TextBlock Grid.Row="1" Grid.Column="1" Height="80" Background="LightYellow"/>
+
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="段长（字节）：" VerticalAlignment="Center"/>
+                    <TextBox Height="30" Width="60" Text="{Binding ByteLength}" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <Label Content="密钥（8位）：" VerticalAlignment="Center"/>
+                    <TextBox Height="30" Width="100" Text="{Binding Key}" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="EncodeFileButton" Content="加密" Height="30" Width="100" Click="EncodeFileButton_Click"/>
+                    <ProgressBar x:Name="progressBar" Height="30" Width="100">
+                        <ProgressBar.Triggers>
+                            <EventTrigger RoutedEvent="ProgressBar.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="progressBar" 
                                                  Storyboard.TargetProperty="Value"
                                                  From="0" To="100" Duration="0:0:5"  />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </ProgressBar.Triggers>
-            </ProgressBar>
-        </StackPanel>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ProgressBar.Triggers>
+                    </ProgressBar>
+                </StackPanel>
 
-        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
-            <Button x:Name="DecodeButton" Content="解密" Height="30" Width="100" Click="DecodeButton_Click"/>
-            <ProgressBar x:Name="progressBar2" Height="30" Width="100">
-                <ProgressBar.Triggers>
-                    <EventTrigger RoutedEvent="ProgressBar.Loaded">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetName="progressBar2" 
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="DecodeFileButton" Content="解密" Height="30" Width="100" Click="DecodeFileButton_Click"/>
+                    <ProgressBar x:Name="progressBar2" Height="30" Width="100">
+                        <ProgressBar.Triggers>
+                            <EventTrigger RoutedEvent="ProgressBar.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="progressBar2" 
                                                  Storyboard.TargetProperty="Value"
                                                  From="0" To="100" Duration="0:0:5"  />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </ProgressBar.Triggers>
-            </ProgressBar>
-        </StackPanel>
-    </Grid>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ProgressBar.Triggers>
+                    </ProgressBar>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="文本">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+                    <Label Content="明文："/>
+                    <TextBox Text="{Binding EncodingText}" Height="150" Margin="5,0" TextWrapping="Wrap" Background="LightCyan"/>
+                    <Button x:Name="ClearEncodingTextButton" Content="清空" Width="50" Click="ClearEncodingTextButton_Click"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+                    <Label Content="密文："/>
+                    <TextBox Text="{Binding DecodingText}" Height="150" Margin="5,0" TextWrapping="Wrap" Background="LightCyan"/>
+                    <Button x:Name="ClearDecodingTextButton" Content="清空" Width="50" Click="ClearDecodingTextButton_Click"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="段长（字节）：" VerticalAlignment="Center"/>
+                    <TextBox Height="30" Width="60" Text="{Binding ByteLength}" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                    <Label Content="密钥（8位）：" VerticalAlignment="Center"/>
+                    <TextBox Height="30" Width="100" Text="{Binding Key}" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <Button Grid.Row="2" Grid.Column="0" x:Name="EncodeTextButton" Content="加密" Height="30" Width="100" Click="EncodeTextButton_Click"/>
+                <Button Grid.Row="2" Grid.Column="1" x:Name="DecodeTextButton" Content="解密" Height="30" Width="100" Click="DecodeTextButton_Click"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+
 </Window>

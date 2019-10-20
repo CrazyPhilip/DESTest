@@ -10,12 +10,20 @@ namespace DESTest
 {
     public class MainViewModel : BaseViewModel
     {
-        private string filePath;   //comment
+        private string encodingFilePath;   //comment
 
-        public string FilePath
+        public string EncodingFilePath
         {
-            get { return filePath; }
-            set { SetProperty(ref filePath, value); }
+            get { return encodingFilePath; }
+            set { SetProperty(ref encodingFilePath, value); }
+        }
+
+        private string decodingFilePath;   //comment
+
+        public string DecodingFilePath
+        {
+            get { return decodingFilePath; }
+            set { SetProperty(ref decodingFilePath, value); }
         }
 
         private int byteLength;   //comment
@@ -26,12 +34,28 @@ namespace DESTest
             set { SetProperty(ref byteLength, value); }
         }
 
-        private string decodeFilePath;   //comment
+        private string key;   //comment
 
-        public string DecodeFilePath
+        public string Key
         {
-            get { return decodeFilePath; }
-            set { SetProperty(ref decodeFilePath, value); }
+            get { return key; }
+            set { SetProperty(ref key, value); }
+        }
+
+        private string encodingText;   //comment
+
+        public string EncodingText
+        {
+            get { return encodingText; }
+            set { SetProperty(ref encodingText, value); }
+        }
+
+        private string decodingText;   //comment
+
+        public string DecodingText
+        {
+            get { return decodingText; }
+            set { SetProperty(ref decodingText, value); }
         }
 
         public MainViewModel()

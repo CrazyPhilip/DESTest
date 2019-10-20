@@ -47,83 +47,6 @@ namespace DESTest
         }
 
         /// <summary>
-        /// 开始
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(mainViewModel.FilePath))
-            {
-                byteArray = FileToByte(mainViewModel.FilePath);
-            }
-
-            if (byteArray != null)
-            {
-                //ByteToFileNotEncoding(byteArray, fileName);
-                bool flag = ByteToFileEncoding2(byteArray, mainViewModel.DecodeFilePath);
-                if (flag)
-                {
-                    MessageBox.Show("加密成功");
-                }
-                else
-                {
-                    MessageBox.Show("加密失败");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 解密
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DecodeButton_Click(object sender, RoutedEventArgs e)
-        {
-            //MessageBox.Show(mainViewModel.ByteLength.ToString());
-            if (!string.IsNullOrWhiteSpace(mainViewModel.FilePath))
-            {
-                decodeByteArray = FileToByte(mainViewModel.DecodeFilePath);
-            }
-
-            if (decodeByteArray != null)
-            {
-                //string str = Encoding.Default.GetString(decodeByteArray);
-                string fileName = mainViewModel.DecodeFilePath.Split('.')[0] + "_decoded.dec";
-                bool flag = Decoding(decodeByteArray, fileName);
-                if (flag)
-                {
-                    MessageBox.Show("解密成功");
-                }
-                else
-                {
-                    MessageBox.Show("解密失败");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 选择文件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SelectFileButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = true;
-            dialog.Title = "请选择文件";
-            dialog.Filter = "任何文件(*.*)|*.*";
-
-            var result = dialog.ShowDialog();
-            if (result == true)
-            {
-                mainViewModel.FilePath = dialog.FileName;
-                mainViewModel.DecodeFilePath = dialog.FileName.Split('.')[0] + ".enc";
-            }
-
-        }
-
-        /// <summary>
         /// 读取文件到byte数组
         /// </summary>
         /// <param name="fileName"></param>
@@ -171,59 +94,45 @@ namespace DESTest
         }
 
         /// <summary>
-        /// 存入文件时加密
+        /// 加密文本
         /// </summary>
         /// <param name="array"></param>
-        /// <param name="fileName"></param>
         /// <returns></returns>
-        private bool ByteToFileEncoding(byte[] array, string fileName)
+        private string EncodeText(string encodingText, string key)
         {
-            bool result = false;
+            string result = "";
             try
             {
-                using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
-                {
-                    //int index = 0;
-                    int step = mainViewModel.ByteLength;
-
-                    int remainder = array.Length % step;
-                    int gap = step - remainder;
-
-                    //int biggerLength = array.Length / step + 1;
-                    //byte[] BiggerBytes = new byte[biggerLength] { (byte)step };
-                    //for (int s = 0; s < gap; s++)
-                    //{
-                    //    array[array.Length - 1 + s] = (byte)gap;
-                    //}
-                    //array[array.Length + gap] = (byte)gap;
-
-                    int times = 0;
-                    int start_index = step * times;
-                    while (start_index < array.Length)
-                    {
-                        byte[] temp = new byte[step];
-
-                        for (int i = 0; i < step; i++)
-                        {
-                            temp[i] = start_index + i < array.Length ? array[start_index + i] : (byte)gap;
-                        }
-
-                        string str = Encoding.Default.GetString(temp);
-                        string encodedStr = dESEncrypt.DefaultEncrypt(str);
-                        byte[] writeBytes = Encoding.Default.GetBytes(encodedStr);
-
-                        fs.Write(writeBytes, 0, writeBytes.Length);
-
-                        times++;
-                        start_index = step * times;
-                    }
-                    result = true;
-                }
+                dESEncrypt.Key = key;
+                string encodedStr = dESEncrypt.DefaultEncrypt(encodingText);
+                result = encodedStr;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                result = false;
+                result = "";
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 解密文本
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        private string DecodeText(string decodingText, string key)
+        {
+            string result = "";
+            try
+            {
+                dESEncrypt.Key = key;
+                string encodedStr = dESEncrypt.DefaultDecrypt(decodingText);
+                result = encodedStr;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result = "";
             }
             return result;
         }
@@ -234,7 +143,7 @@ namespace DESTest
         /// <param name="array"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private bool ByteToFileEncoding2(byte[] array, string fileName)
+        private bool EncodeFile(byte[] array, string fileName, string key)
         {
             bool result = false;
             try
@@ -243,7 +152,7 @@ namespace DESTest
                 {
                     byte[] m = new byte[8];
                     byte[] e = new byte[8];
-                    byte[] k = Encoding.UTF8.GetBytes("12345678");
+                    byte[] k = Encoding.UTF8.GetBytes(key);
 
                     //int index = 0;
                     int step = mainViewModel.ByteLength;
@@ -289,7 +198,7 @@ namespace DESTest
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private bool Decoding(byte[] array, string fileName)
+        private bool DecodeFile(byte[] array, string fileName, string key)
         {
             bool result = false;
             try
@@ -298,11 +207,11 @@ namespace DESTest
                 {
                     byte[] m = new byte[8];
                     byte[] e = new byte[8];
-                    byte[] k = Encoding.UTF8.GetBytes("12345678");
+                    byte[] k = Encoding.UTF8.GetBytes(key);
 
                     //int index = 0;
                     int step = mainViewModel.ByteLength;
-                    
+
                     int times = 0;
                     int total_times = array.Length / step;
                     int start_index = step * times;
@@ -341,9 +250,150 @@ namespace DESTest
             return result;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        #region 加解密文件
+        /// <summary>
+        /// 选择明文文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectEncodingFileButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(add(1, 2).ToString());
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+            dialog.Title = "请选择文件";
+            dialog.Filter = "任何文件(*.*)|*.*";
+
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                mainViewModel.EncodingFilePath = dialog.FileName;
+                mainViewModel.DecodingFilePath = dialog.FileName.Split('.')[0] + "_encoded.enc";
+            }
         }
+
+        /// <summary>
+        /// 选择密文文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectDecodingFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+            dialog.Title = "请选择文件";
+            dialog.Filter = "任何文件(*.*)|*.*";
+
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                mainViewModel.DecodingFilePath = dialog.FileName;
+                mainViewModel.EncodingFilePath = dialog.FileName.Split('.')[0] + "_decoded.dec";
+            }
+        }
+
+        /// <summary>
+        /// 加密文件按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EncodeFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(mainViewModel.EncodingFilePath))
+            {
+                byteArray = FileToByte(mainViewModel.EncodingFilePath);
+            }
+
+            if (byteArray != null)
+            {
+                //ByteToFileNotEncoding(byteArray, fileName);
+                bool flag = EncodeFile(byteArray, mainViewModel.DecodingFilePath, mainViewModel.Key);
+                if (flag)
+                {
+                    MessageBox.Show("加密成功");
+                }
+                else
+                {
+                    MessageBox.Show("加密失败");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 解密文件按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DecodeFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show(mainViewModel.ByteLength.ToString());
+            if (!string.IsNullOrWhiteSpace(mainViewModel.DecodingFilePath))
+            {
+                decodeByteArray = FileToByte(mainViewModel.DecodingFilePath);
+            }
+
+            if (decodeByteArray != null)
+            {
+                //string str = Encoding.Default.GetString(decodeByteArray);
+                bool flag = DecodeFile(decodeByteArray, mainViewModel.EncodingFilePath, mainViewModel.Key);
+                if (flag)
+                {
+                    MessageBox.Show("解密成功");
+                }
+                else
+                {
+                    MessageBox.Show("解密失败");
+                }
+            }
+        }
+        #endregion
+
+        #region 加解密文本
+        /// <summary>
+        /// 清空明文文本框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ClearEncodingTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainViewModel.EncodingText = "";
+        }
+
+        /// <summary>
+        /// 清空密文文本框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ClearDecodingTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainViewModel.DecodingText = "";
+        }
+
+        /// <summary>
+        /// 加密文本按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EncodeTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(mainViewModel.EncodingText))
+            {
+                mainViewModel.DecodingText = EncodeText(mainViewModel.EncodingText, mainViewModel.Key);
+            }
+        }
+
+        /// <summary>
+        /// 解密文本按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DecodeTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(mainViewModel.DecodingText))
+            {
+                mainViewModel.EncodingText = DecodeText(mainViewModel.DecodingText, mainViewModel.Key);
+            }
+        }
+        #endregion
+
     }
 }
