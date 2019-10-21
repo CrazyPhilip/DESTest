@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -193,6 +194,12 @@ namespace DESTest
             return result;
         }
 
+        private bool EncodeFile(object para)
+        {
+            Para para1 = (Para)para;
+            return EncodeFile(para1.array, para1.fileName, para1.key);
+        }
+
         /// <summary>
         /// 解密
         /// </summary>
@@ -268,6 +275,8 @@ namespace DESTest
             {
                 mainViewModel.EncodingFilePath = dialog.FileName;
                 mainViewModel.DecodingFilePath = dialog.FileName.Split('.')[0] + "_encoded.enc";
+
+                mainViewModel.EncodingFileInfo = GetFileInfo(mainViewModel.EncodingFilePath);
             }
         }
 
@@ -288,6 +297,8 @@ namespace DESTest
             {
                 mainViewModel.DecodingFilePath = dialog.FileName;
                 mainViewModel.EncodingFilePath = dialog.FileName.Split('.')[0] + "_decoded.dec";
+
+                mainViewModel.DecodingFileInfo = GetFileInfo(mainViewModel.DecodingFilePath);
             }
         }
 
@@ -298,6 +309,7 @@ namespace DESTest
         /// <param name="e"></param>
         private void EncodeFileButton_Click(object sender, RoutedEventArgs e)
         {
+            mainViewModel.IsEncodeFileActive = true;
             if (!string.IsNullOrWhiteSpace(mainViewModel.EncodingFilePath))
             {
                 byteArray = FileToByte(mainViewModel.EncodingFilePath);
@@ -307,15 +319,27 @@ namespace DESTest
             {
                 //ByteToFileNotEncoding(byteArray, fileName);
                 bool flag = EncodeFile(byteArray, mainViewModel.DecodingFilePath, mainViewModel.Key);
+                //Thread t = new Thread(new ParameterizedThreadStart(EncodeFile));
+                //Para para = new Para
+                //{
+                //    array = byteArray, fileName = mainViewModel.DecodingFilePath, key = mainViewModel.Key
+                //};
+                //Task<bool> t = new Task<bool>(p => EncodeFile((Para)p), para);
+                //t.Start();
+                //t.Wait();
                 if (flag)
                 {
+                    mainViewModel.IsEncodeFileActive = false;
                     MessageBox.Show("加密成功");
+                    mainViewModel.DecodingFileInfo = GetFileInfo(mainViewModel.DecodingFilePath);
                 }
                 else
                 {
+                    mainViewModel.IsEncodeFileActive = false;
                     MessageBox.Show("加密失败");
                 }
             }
+            
         }
 
         /// <summary>
@@ -325,7 +349,7 @@ namespace DESTest
         /// <param name="e"></param>
         private void DecodeFileButton_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show(mainViewModel.ByteLength.ToString());
+            mainViewModel.IsDecodeFileActive = true;
             if (!string.IsNullOrWhiteSpace(mainViewModel.DecodingFilePath))
             {
                 decodeByteArray = FileToByte(mainViewModel.DecodingFilePath);
@@ -337,10 +361,13 @@ namespace DESTest
                 bool flag = DecodeFile(decodeByteArray, mainViewModel.EncodingFilePath, mainViewModel.Key);
                 if (flag)
                 {
+                    mainViewModel.IsDecodeFileActive = false;
                     MessageBox.Show("解密成功");
+                    mainViewModel.EncodingFileInfo = GetFileInfo(mainViewModel.EncodingFilePath);
                 }
                 else
                 {
+                    mainViewModel.IsDecodeFileActive = false;
                     MessageBox.Show("解密失败");
                 }
             }
@@ -375,10 +402,12 @@ namespace DESTest
         /// <param name="e"></param>
         private void EncodeTextButton_Click(object sender, RoutedEventArgs e)
         {
+            mainViewModel.IsEncodeTextActive = true;
             if (!string.IsNullOrWhiteSpace(mainViewModel.EncodingText))
             {
                 mainViewModel.DecodingText = EncodeText(mainViewModel.EncodingText, mainViewModel.Key);
             }
+            mainViewModel.IsEncodeTextActive = false;
         }
 
         /// <summary>
@@ -388,12 +417,34 @@ namespace DESTest
         /// <param name="e"></param>
         private void DecodeTextButton_Click(object sender, RoutedEventArgs e)
         {
+            mainViewModel.IsDecodeTextActive = true;
             if (!string.IsNullOrWhiteSpace(mainViewModel.DecodingText))
             {
                 mainViewModel.EncodingText = DecodeText(mainViewModel.DecodingText, mainViewModel.Key);
             }
+            mainViewModel.IsDecodeTextActive = false;
         }
         #endregion
 
+        private string GetFileInfo(string filePath)
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("文件名：{0}", fileInfo.Name));
+            sb.AppendLine(string.Format("文件字节长度：{0}字节", fileInfo.Length));
+            sb.AppendLine(string.Format("文件创建时间：{0}", fileInfo.CreationTime.ToString()));
+            sb.AppendLine(string.Format("文件最后一次读取时间：{0}", fileInfo.LastAccessTime.ToString()));
+            sb.AppendLine(string.Format("文件最后一次修改时间：{0}", fileInfo.LastWriteTime.ToString()));
+
+            return sb.ToString();
+        }
+
+        private void ClearFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainViewModel.EncodingFilePath = "";
+            mainViewModel.DecodingFilePath = "";
+            mainViewModel.EncodingFileInfo = "";
+            mainViewModel.DecodingFileInfo = "";
+        }
     }
 }

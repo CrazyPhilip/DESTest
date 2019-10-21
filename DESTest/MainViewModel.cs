@@ -58,9 +58,59 @@ namespace DESTest
             set { SetProperty(ref decodingText, value); }
         }
 
+        private string encodingFileInfo;   //comment
+
+        public string EncodingFileInfo
+        {
+            get { return encodingFileInfo; }
+            set { SetProperty(ref encodingFileInfo, value); }
+        }
+
+        private string decodingFileInfo;   //comment
+
+        public string DecodingFileInfo
+        {
+            get { return decodingFileInfo; }
+            set { SetProperty(ref decodingFileInfo, value); }
+        }
+
+
+        private bool isEncodeFileActive;   //comment
+
+        public bool IsEncodeFileActive
+        {
+            get { return isEncodeFileActive; }
+            set { SetProperty(ref isEncodeFileActive, value); }
+        }
+
+        private bool isDecodeFileActive;   //comment
+
+        public bool IsDecodeFileActive
+        {
+            get { return isDecodeFileActive; }
+            set { SetProperty(ref isDecodeFileActive, value); }
+        }
+
+        private bool isEncodeTextActive;   //comment
+
+        public bool IsEncodeTextActive
+        {
+            get { return isEncodeTextActive; }
+            set { SetProperty(ref isEncodeTextActive, value); }
+        }
+
+        private bool isDecodeTextActive;   //comment
+
+        public bool IsDecodeTextActive
+        {
+            get { return isDecodeTextActive; }
+            set { SetProperty(ref isDecodeTextActive, value); }
+        }
+
         public MainViewModel()
         {
             ByteLength = 8;
+
         }
 
     }

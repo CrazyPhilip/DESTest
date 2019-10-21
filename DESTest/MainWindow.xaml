@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DESTest"
+        xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
         mc:Ignorable="d"
         Title="DES"
         Height="400" Width="800" ResizeMode="NoResize">
@@ -27,7 +28,7 @@
                     <TextBox Height="30" Text="{Binding EncodingFilePath}" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
-                <TextBlock Grid.Row="0" Grid.Column="1" Height="80" Background="LightYellow"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding EncodingFileInfo}" Height="80" Background="LightYellow"/>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
                     <Label Content="密文文件路径：" VerticalAlignment="Center"/>
@@ -35,7 +36,7 @@
                     <TextBox Height="30" Text="{Binding DecodingFilePath}" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Height="80" Background="LightYellow"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DecodingFileInfo}" Height="80" Background="LightYellow"/>
 
                 <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                     <Label Content="段长（字节）：" VerticalAlignment="Center"/>
@@ -49,36 +50,13 @@
 
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
                     <Button x:Name="EncodeFileButton" Content="加密" Height="30" Width="100" Click="EncodeFileButton_Click"/>
-                    <ProgressBar x:Name="progressBar" Height="30" Width="100">
-                        <ProgressBar.Triggers>
-                            <EventTrigger RoutedEvent="ProgressBar.Loaded">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="progressBar" 
-                                                 Storyboard.TargetProperty="Value"
-                                                 From="0" To="100" Duration="0:0:5"  />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </ProgressBar.Triggers>
-                    </ProgressBar>
+                    <li:LoadingIndicator SpeedRatio="1" IsActive="{Binding IsEncodeFileActive}" Mode="ArcsRing"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                     <Button x:Name="DecodeFileButton" Content="解密" Height="30" Width="100" Click="DecodeFileButton_Click"/>
-                    <ProgressBar x:Name="progressBar2" Height="30" Width="100">
-                        <ProgressBar.Triggers>
-                            <EventTrigger RoutedEvent="ProgressBar.Loaded">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="progressBar2" 
-                                                 Storyboard.TargetProperty="Value"
-                                                 From="0" To="100" Duration="0:0:5"  />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </ProgressBar.Triggers>
-                    </ProgressBar>
+                    <li:LoadingIndicator SpeedRatio="1" IsActive="{Binding IsDecodeFileActive}" Mode="ArcsRing"/>
+                    <Button x:Name="ClearFileButton" Content="全部清空" Height="30" Width="100" Click="ClearFileButton_Click"/>
                 </StackPanel>
             </Grid>
         </TabItem>
@@ -117,8 +95,16 @@
                     <TextBox Height="30" Width="100" Text="{Binding Key}" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
-                <Button Grid.Row="2" Grid.Column="0" x:Name="EncodeTextButton" Content="加密" Height="30" Width="100" Click="EncodeTextButton_Click"/>
-                <Button Grid.Row="2" Grid.Column="1" x:Name="DecodeTextButton" Content="解密" Height="30" Width="100" Click="DecodeTextButton_Click"/>
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="EncodeTextButton" Content="加密" Height="30" Width="100" Click="EncodeTextButton_Click"/>
+                    <li:LoadingIndicator SpeedRatio="1" IsActive="{Binding IsEncodeTextActive}" Mode="ArcsRing"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="DecodeTextButton" Content="解密" Height="30" Width="100" Click="DecodeTextButton_Click"/>
+                    <li:LoadingIndicator SpeedRatio="1" IsActive="{Binding IsDecodeTextActive}" Mode="ArcsRing"/>
+                </StackPanel>
+                
             </Grid>
         </TabItem>
     </TabControl>
