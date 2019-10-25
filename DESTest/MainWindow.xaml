@@ -7,13 +7,33 @@
         xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
         mc:Ignorable="d"
         Title="DES"
-        Height="400" Width="800" ResizeMode="NoResize">
+        Height="600" Width="1200" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="90"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Height" Value="180"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Background" Value="LightYellow"/>
+        </Style>
+    </Window.Resources>
+    
     <TabControl>
         <TabItem Header="文件">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="200"/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
@@ -25,18 +45,18 @@
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
                     <Label Content="明文文件路径：" VerticalAlignment="Center"/>
                     <Button x:Name="SelectEncodingFileButton" Content="打开文件" Width="100" HorizontalAlignment="Left" Click="SelectEncodingFileButton_Click"/>
-                    <TextBox Height="30" Text="{Binding EncodingFilePath}" VerticalContentAlignment="Center"/>
+                    <TextBox Text="{Binding EncodingFilePath}" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding EncodingFileInfo}" Height="80" Background="LightYellow"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding EncodingFileInfo}"/>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
                     <Label Content="密文文件路径：" VerticalAlignment="Center"/>
                     <Button x:Name="SelectDecodingFileButton" Content="打开文件" Width="100" HorizontalAlignment="Left" Click="SelectDecodingFileButton_Click"/>
-                    <TextBox Height="30" Text="{Binding DecodingFilePath}" VerticalContentAlignment="Center"/>
+                    <TextBox Text="{Binding DecodingFilePath}" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DecodingFileInfo}" Height="80" Background="LightYellow"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DecodingFileInfo}"/>
 
                 <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                     <Label Content="段长（字节）：" VerticalAlignment="Center"/>
@@ -45,7 +65,7 @@
 
                 <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                     <Label Content="密钥（8位）：" VerticalAlignment="Center"/>
-                    <TextBox Height="30" Width="100" Text="{Binding Key}" VerticalContentAlignment="Center"/>
+                    <TextBox Height="30" Width="150" Text="{Binding Key}" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
@@ -75,13 +95,13 @@
 
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
                     <Label Content="明文："/>
-                    <TextBox Text="{Binding EncodingText}" Height="150" Margin="5,0" TextWrapping="Wrap" Background="LightCyan"/>
+                    <TextBox Text="{Binding EncodingText}" Height="240" Margin="5,0" TextWrapping="Wrap" Background="LightCyan"/>
                     <Button x:Name="ClearEncodingTextButton" Content="清空" Width="50" Click="ClearEncodingTextButton_Click"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
                     <Label Content="密文："/>
-                    <TextBox Text="{Binding DecodingText}" Height="150" Margin="5,0" TextWrapping="Wrap" Background="LightCyan"/>
+                    <TextBox Text="{Binding DecodingText}" Height="240" Margin="5,0" TextWrapping="Wrap" Background="LightCyan"/>
                     <Button x:Name="ClearDecodingTextButton" Content="清空" Width="50" Click="ClearDecodingTextButton_Click"/>
                 </StackPanel>
 
